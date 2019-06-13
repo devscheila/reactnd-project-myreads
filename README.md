@@ -1,4 +1,4 @@
-# Avaliação de restaurantes
+# Estante de Livros MyReads
 
 Projeto criado como parte do Nanodegree Web Front-End Avançado da Udacity. Aplicativo de estante de livros que permite pesquisa, seleção e classificação de livros pré-definidos para leitura. O projeto foi desenvolvido com react.
 
