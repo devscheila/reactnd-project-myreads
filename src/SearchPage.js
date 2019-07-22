@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import {DebounceInput} from 'react-debounce-input';
 import * as BooksAPI from './BooksAPI';
 import Book from './Book.js';
 
@@ -17,18 +18,29 @@ class SearchPage extends Component {
 	}
 
 	updateSearchBooks = (query) => {
-		if (query) {
-			BooksAPI.search(query).then((searchBooks) => {
-				if (searchBooks.error) {
-					this.setState({ searchBooks: [] });
-				} else {
-					this.setState({ searchBooks: searchBooks });
-				}
-			})
-		} else {
-			this.setState({ searchBooks: [] });
-		}
+		
+			if (query) {
+				BooksAPI.search(query).then((searchBooks) => {
+					if (searchBooks.error) {
+						this.setState({ searchBooks: [] });
+					} else {
+						this.setState({ searchBooks: searchBooks });
+					}
+				})
+			} else {
+				this.setState({ searchBooks: [] });
+			}
 	}
+
+
+	changeShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf).then(() => {
+      BooksAPI.getAll().then((books) => {
+        this.setState({ books: books })
+      })
+    }) 
+	}
+	
 
 	render() {
 		return (
@@ -36,7 +48,9 @@ class SearchPage extends Component {
 				<div className="search-books-bar">
 					<Link to="/" className="close-search">Close</Link>
 					<div className="search-books-input-wrapper">
-						<input 
+						<DebounceInput
+							minLength={2}
+							debounceTimeout={500}
 							type="text" 
 							placeholder="Search by title or author"
 							value={this.state.query}
